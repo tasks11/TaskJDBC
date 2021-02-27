@@ -36,27 +36,10 @@ public class Util {
         try {
             connection = DriverManager.getConnection(dbURL, name, secondName);
             return connection;
-//            Statement queryStatement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
 
     }
-
-//    public static SessionFactory getConfig() { //пока НЕНУЖНА
-//        if (conn == null) {
-//            try {
-//                Configuration configuration = new Configuration().configure();
-//                configuration.addAnnotatedClass(User.class);
-//                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-//                conn = configuration.buildSessionFactory(builder.build());
-//
-//            } catch (Exception e) {
-//                System.out.println("Исключение!" + e);
-//            }
-//        }
-//        return conn;
-//    }
-
 }
