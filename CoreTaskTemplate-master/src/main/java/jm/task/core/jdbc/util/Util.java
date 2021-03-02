@@ -9,16 +9,13 @@ import org.hibernate.service.ServiceRegistry;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Util {
     // реализуйте настройку соеденения с БД
-
-//    private static SessionFactory conn;
-//    private static Util instance;
+    private static SessionFactory sessionFactory;
 
     private Util() {
-        getConn();
+//        getConn();
     }
 
 //    public static Util getInstance() {
@@ -40,6 +37,21 @@ public class Util {
             e.printStackTrace();
         }
         return connection;
+    }
 
+    static public SessionFactory getConfiguration() {
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(User.class);
+
+        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/conn?useSSL=false");
+        configuration.setProperty("hibernate.connection.username", "root");
+        configuration.setProperty("hibernate.connection.password", "root");
+        configuration.setProperty("hibernate.show_sql", "true");
+        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+        sessionFactory = configuration.buildSessionFactory();
+        return sessionFactory;
     }
 }
