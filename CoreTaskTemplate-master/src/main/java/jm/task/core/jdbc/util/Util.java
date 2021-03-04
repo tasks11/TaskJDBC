@@ -13,23 +13,15 @@ import java.sql.SQLException;
 public class Util {
     // реализуйте настройку соеденения с БД
     private static SessionFactory sessionFactory;
+    private static Connection connection;
 
     private Util() {
-//        getConn();
     }
-
-//    public static Util getInstance() {
-//        if (instance == null) {
-//            instance = new Util();
-//        }
-//        return instance;
-//    }
 
     public static Connection getConn() {
         String dbURL = "jdbc:mysql://localhost:3306/conn?useSSL=false";
         String name = "root";
         String secondName = "root";
-        Connection connection = null;
         try {
             connection = DriverManager.getConnection(dbURL, name, secondName);
             return connection;

@@ -2,9 +2,6 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,8 +12,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private Statement statement;
-    private ResultSet resultSet;
+    private final Connection connection = Util.getConn();
 
     public UserDaoJDBCImpl() {
     }
@@ -28,7 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "lastname VARCHAR(25) NOT NULL," +
                 "age INT(11) NOT NULL)";
         try {
-            statement = Util.getConn().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(create);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,7 +34,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         String drop = "DROP TABLE IF EXISTS users";
         try {
-            statement = Util.getConn().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(drop);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,9 +46,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 "', '" + lastName + "', '" + age + "')";
         String getUser = "SELECT * FROM users WHERE name='" + name + "'";
         try {
-            statement = Util.getConn().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(save);
-            resultSet = statement.executeQuery(getUser);
+            ResultSet resultSet = statement.executeQuery(getUser);
             while (resultSet.next()) {
                 User user = new User(
                         resultSet.getLong(1),
@@ -70,7 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String deleteById = "DELETE FROM users WHERE id='" + id +"'";
         try {
-            statement = Util.getConn().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(deleteById);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,8 +77,8 @@ public class UserDaoJDBCImpl implements UserDao {
         String getAllUser = "SELECT * FROM users";
         List <User>  list = new ArrayList();
         try{
-            statement = Util.getConn().createStatement();
-            resultSet = statement.executeQuery(getAllUser);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(getAllUser);
             while (resultSet.next()) {
                 list.add(
                         new User(
@@ -103,7 +99,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         String clean = "DELETE FROM users";
         try {
-            statement = Util.getConn().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(clean);
         } catch (SQLException e) {
             e.printStackTrace();
